@@ -30,3 +30,12 @@ export const createPet = (user, newPet) => {
 
 
 //! DELETE (delete a pet)
+export const removePet = (user, petId) => {
+    return axios({
+        url: `${apiUrl}/pets/${petId}`,
+        method: 'DELETE',
+        headers: {
+            Authorization: `Token token=${user.token}`
+        }
+    })
+}
