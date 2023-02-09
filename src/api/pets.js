@@ -27,7 +27,16 @@ export const createPet = (user, newPet) => {
 }
 
 //! UPDATE (update a pet)
-
+export const updatePet = (user, updatedPet) => {
+    return axios({
+        url: `${apiUrl}/pets/${updatedPet.id}`,
+        method: 'PATCH',
+        headers: {
+            Authorization: `Token token=${user.token}`
+        },
+        data: { pet: updatedPet }
+    })
+}
 
 //! DELETE (delete a pet)
 export const removePet = (user, petId) => {
