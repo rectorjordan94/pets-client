@@ -1,7 +1,8 @@
 import { Card, Button } from 'react-bootstrap'
+import { deleteToy } from '../../api/toys'
 
 const ShowToy = (props) => {
-    const { toy } = props
+    const { toy, user, pet, msgAlert, triggerRefresh } = props
 
     // here, we're going to use react styling objects to our advantage
     // this will look at the toy's condition, and change the background color
@@ -17,6 +18,32 @@ const ShowToy = (props) => {
         }
     }
 
+    // delete, similar to delete for pets, all we have to do is ensure that the user is the pet's owner, and make the api call passing in the right args
+    const destroyToy = () => {
+        // this is the api call file function
+        // it requires three args: user, petId, toyId
+        deleteToy(user, pet.id, toy._id)
+        // upon success, we want to send a message
+            .then(() => {
+                msgAlert({
+                    heading: 'Toy deleted',
+                    message: 'bye bye toy',
+                    variant: 'success'
+                })
+            })
+        // then trigger a refresh of the parent component
+            .then(() => triggerRefresh())
+        // upon failure send an appropriate message
+            .catch(() => {
+                msgAlert({
+                    heading: 'WHOOPS',
+                    message: 'that didnt work...',
+                    variant: 'danger'
+                })
+            })
+
+    }
+
     return (
         <>
             <Card className="m-2" style={setBgCondition(toy.condition)}>
@@ -27,7 +54,18 @@ const ShowToy = (props) => {
                         { toy.isSqueaky ? 'squeak squeak' : 'stoic silence'}
                     </small>
                 </Card.Body>
-                <Card.Footer>Condition: { toy.condition }</Card.Footer>
+                <Card.Footer>
+                    <small>Condition: {toy.condition}</small><br />
+                    {
+                        user && user._id === pet.owner._id
+                        ?
+                        <>
+                            <Button onClick={() => destroyToy()} variant='danger' className='m-2'>Delete Toy</Button>
+                        </>
+                        :
+                        null
+                    }
+                </Card.Footer>
             </Card>
         </>
     )

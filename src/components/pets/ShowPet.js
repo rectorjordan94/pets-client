@@ -74,6 +74,10 @@ const ShowPet = (props) => {
                 <ShowToy
                     toy={toy}
                     key={toy.id}
+                    user={user}
+                    pet={pet}
+                    msgAlert={msgAlert}
+                    triggerRefresh={() => setUpdated(prev => !prev)}
                 />
             ))
         }
@@ -100,7 +104,7 @@ const ShowPet = (props) => {
                         </Card.Text>
                     </Card.Body>
                     <Card.Footer>
-                        <Button className="m-2" variant='info' conClick={() => setToyModalShow(true)}>
+                        <Button className="m-2" variant='info' onClick={() => setToyModalShow(true)}>
                             Give {pet.name} a toy!
                         </Button>
                         {
